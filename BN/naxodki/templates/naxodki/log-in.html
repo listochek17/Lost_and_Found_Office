@@ -1,0 +1,67 @@
+{% load static %}
+{% load n_tags %}
+{% data_login as dl %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dl.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'naxodki/css/log-in.css' %}">
+</head>
+<body>
+<main class="container">
+<section id="login-screen" class="form-screen active">
+    <div class="logo">
+        <i class="fas fa-planet-ringed" style="color:#0d1b3e;"></i>
+        <span>Logo</span>
+    </div>
+    <!-- Social login placeholders — replace href with real auth URL when backend is ready -->
+    <button class="btn btn-social">
+        <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="G">
+        <a href="#">
+            <span>Google orqali davom etish</span>
+        </a>
+    </button>
+    <button class="btn btn-social">
+        <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
+        <a href="#">
+            <span>Facebook orqali davom etish</span>
+        </a>
+    </button>
+    <div class="divider"><span>OR</span></div>
+    <div class="input-group" id="email-group">
+        <label class="label-text">{{dl.email}}</label>
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="emailInput" placeholder="yagzugaming@gmail.com">
+        <span class="error-message"></span>
+    </div>
+    <div class="input-group" id="password-group">
+        <label class="label-text">{{dl.password}}</label>
+        <i class="fas fa-key"></i>
+        <input type="password" placeholder="**********" id="passwordInput">
+        <i class="fas fa-eye toggle-password"></i>
+    </div>
+    <div class="options">
+        <label>
+            <input type="checkbox">
+            <span>{{dl.remember}}</span>
+        </label>
+        <a href="verification.html" onclick="showScreen('otp-screen');">
+            <span>{{dl.forgot}}</span>
+        </a>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('otp-screen')">{{dl.login}}</button>
+    <div class="kirish-link">
+        <span>{{dl.dont_have}}</span>
+        <a href="registration.html" onclick="showScreen('register-screen');">
+            <span>{{dl.register}}</span>
+        </a>
+    </div>
+</section>
+</main>
+<script src="{% static 'naxodki/js/script2.js' %}"></script>
+</body>
+</html>

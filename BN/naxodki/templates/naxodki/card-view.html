@@ -1,0 +1,150 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title >{{title}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'naxodki/css/app.css' %}">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-box"><i class="fas fa-search-location"></i></div>
+                <span data-lang="logo_text">Бюро Находок</span>
+            </div>
+
+            <div class="search-bar">
+                <div class="search-category">
+                    <span data-lang="search_category">Категории</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <input type="text" data-lang="search_placeholder" placeholder="Поиск по названию...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn" id="themeBtn"><i class="fas fa-moon"></i></button>
+                
+                <div class="lang-dropdown">
+                    <button class="lang-btn" onclick="toggleLangMenu()">
+                        <span id="currentLang">RU</span> <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu" id="langMenu">
+                        <a href="#" onclick="changeLanguage('ru')" data-lang="lang_ru">Русский</a>
+                        <a href="#" onclick="changeLanguage('uz')" data-lang="lang_uz">O'zbekcha</a>
+                        <a href="#" onclick="changeLanguage('en')" data-lang="lang_en">English</a>
+                    </div>
+                </div>
+            
+                <div class="profile-dropdown">
+                    <button class="profile-btn" onclick="toggleProfileMenu()">
+                        <img src="default-avatar.png" alt="User" class="header-avatar-img">
+                    </button>
+                    <div class="dropdown-menu" id="profileMenu">
+                        <div class="dropdown-header">
+                            <strong data-lang="profile_username">Имя Пользователя</strong>
+                            <span>user@example.com</span>
+                        </div>
+                        <hr>
+                        <a href="profile.html"><i class="fas fa-cog"></i> <span data-lang="settings">Настройки профиля</span></a>
+                        <a href="index.html" class="text-danger" data-logout="true"><i class="fas fa-sign-out-alt"></i> <span data-lang="logout">Выйти</span></a>
+                    </div>
+                </div>
+                <a href="upload-card.html" class="btn btn-primary" data-lang="btn_create_ad">Подать объявление</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content product-page">
+        
+        <div class="breadcrumbs">
+            <a href="home.html" data-lang="breadcrumb_home">Главная</a> / <a href="#" data-lang="main_title_found">Найденные вещи</a> / <span>iPhone 13 Pro</span>
+        </div>
+
+        <div class="product-container">
+            
+            <div class="product-gallery">
+                <div class="main-image-box">
+                    <img src="https://placehold.co/600x600/png?text=iPhone+Main" id="mainImg" alt="Main Photo">
+                    
+                    <button class="gallery-arrow left" onclick="prevImage()"><i class="fas fa-chevron-left"></i></button>
+                    <button class="gallery-arrow right" onclick="nextImage()"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="thumbnails-row">
+                    <img src="https://placehold.co/600x600/png?text=iPhone+Main" class="thumb active" onclick="selectImage(0)">
+                    <img src="https://placehold.co/600x600/png?text=Side+View" class="thumb" onclick="selectImage(1)">
+                    <img src="https://placehold.co/600x600/png?text=Back+View" class="thumb" onclick="selectImage(2)">
+                    <img src="https://placehold.co/600x600/png?text=Box" class="thumb" onclick="selectImage(3)">
+                </div>
+            </div>
+
+            <div class="product-info">
+                
+                <div class="product-header">
+                    <h1 data-lang="demo_product_title">{{ title }}</h1>
+                    <div class="date-badge">
+                        <i class="far fa-calendar-alt"></i>
+                        <span data-lang="demo_product_date">{{ post.create_time }}</span>
+                    </div>
+                </div>
+
+                <div class="product-section">
+                    <h3 data-lang="description">Описание</h3>
+                    <p class="desc-text" data-lang="demo_product_desc">{{post.content}}</p>
+                </div>
+
+                <div class="product-section">
+                    <h3 data-lang="finder_profile">Профиль нашедшего</h3>
+                    <div class="finder-card">
+                        <div class="finder-info">
+                            <img src="default-avatar.png" alt="Author" class="finder-avatar author-avatar-img">
+                            <div>
+                                <h4 class="finder-name" data-lang="demo_finder_name">{{post.author}}</h4>
+                                <span class="finder-location" data-lang="demo_finder_location">Toshkent</span>
+                            </div>
+                        </div>
+                        <div class="finder-actions">
+                            <button class="btn-outline" data-lang="btn_call">Позвонить</button>
+                            <button class="btn-outline" data-lang="btn_message">Написать сообщение</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-section">
+                    <h3 data-lang="finder_location">Место находки</h3>
+                    <div class="map-container">
+                        <img src="https://placehold.co/600x300/e0e0e0/555?text=Map+Location" alt="Map">
+                        <div class="map-pin"><i class="fas fa-map-marker-alt"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Правила / Политика <small>(abbr.)</small></h4>
+                <a href="#" title="Политика конфиденциальности">Политика</a>
+                <a href="#" title="Пользовательское соглашение">Правила</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <a href="mailto:info@findings.example">info@findings.example</a>
+                <a href="tel:+123456789">+1 (234) 567‑89</a>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'naxodki/js/script.js' %}"></script>
+    <nav class="mobile-bottom-nav">
+      <a href="home.html" class="nav-item"><i class="fas fa-home"></i><span>Главная</span></a>
+      <a href="upload-card.html" class="nav-item action-btn"><i class="fas fa-plus-circle"></i><span>Подать</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Профиль</span></a>
+    </nav>
+</body>
+</html>

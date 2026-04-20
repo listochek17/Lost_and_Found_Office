@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список клиентов</title>
+</head>
+<body>
+    <h1>Список клиентов</h1>
+    <a href="{% url 'create_client' %}">Создать нового клиента</a>
+    <ul>
+        {% for client in clients %}
+            <li>
+                <a href="{% url 'client_detail' client.id %}">{{ client.name }}</a> - {{ client.email }}
+            </li>
+        {% empty %}
+            <li>Клиентов нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

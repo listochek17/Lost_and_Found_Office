@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная рекламная</title>
+</head>
+<body>
+    <h1>Главная рекламная</h1>
+    <ul>
+        <li>
+            <a href= "{% url 'log_in' %}">Вход</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'reg' %}">Регистрация</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'verification' %}">Верификация</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'about' %}">О нас</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'contact' %}">FAQ</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'main' %}">Главная</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'card_create' %}">Создание объявления</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'client_list' %}">Список клиентов</a>
+        </li>
+        <hr>
+        <li>
+            <a href= "{% url 'create_client' %}">Создать клиента</a>
+        </li>
+    </ul>
+</body>
+</html>

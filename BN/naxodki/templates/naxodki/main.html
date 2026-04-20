@@ -1,0 +1,232 @@
+{% load static %}
+{% load n_tags %}
+{% categories as cats %}
+{% type_data as tip %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Бюро находок - найдите потерянные вещи или сообщите о находке">
+    <title>{{title}} - Бюро находок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'naxodki/css/main.css' %}">
+    <script src="{% static 'naxodki/js/script.js' %}" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'main' %}" class="logo" aria-label="Бюро находок - на главную">
+                <div class="logo-box">
+                    <i class="fas fa-search-location" aria-hidden="true"></i>
+                </div>
+                <span class="logo-text">Бюро Находок</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-bar" role="search">
+                <div class="search-category" aria-label="Выберите категорию">
+                    <span>Категории</span>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </div>
+                <input type="search" placeholder="Поиск по названию..." aria-label="Поиск объявлений">
+                <button type="button" aria-label="Поиск">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!-- Header Actions -->
+            <nav class="header-actions" aria-label="Действия пользователя">
+                <!-- Theme Toggle -->
+                <button type="button" class="icon-btn" id="themeBtn" aria-label="Переключить тему" title="Переключить светлую/тёмную тему">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+
+                <!-- Language Dropdown -->
+                <div class="lang-dropdown">
+                    <button type="button" class="lang-btn" id="langBtn" aria-label="Выбрать язык" aria-expanded="false" aria-controls="langMenu">
+                        <span id="currentLang">RU</span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu" id="langMenu" role="menu" aria-hidden="true">
+                        <a href="#" role="menuitem" data-lang="lang_ru">Русский</a>
+                        <a href="#" role="menuitem" data-lang="lang_uz">O'zbekcha</a>
+                        <a href="#" role="menuitem" data-lang="lang_en">English</a>
+                    </div>
+                </div>
+            
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown">
+                    <button type="button" class="profile-btn" id="profileBtn" aria-label="Профиль пользователя" aria-expanded="false" aria-controls="profileMenu">
+                        <img src="{% static 'naxodki/img/default-avatar.png' %}" alt="Аватар пользователя" class="header-avatar-img" loading="lazy">
+                    </button>
+                    <div class="dropdown-menu" id="profileMenu" role="menu" aria-hidden="true">
+                        <div class="dropdown-header">
+                            <strong>Имя Пользователя</strong>
+                            <span>user@example.com</span>
+                        </div>
+                        <hr aria-hidden="true">
+                        <a href="{% url 'main' %}" role="menuitem">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span>Настройки профиля</span>
+                        </a>
+                        <a href="{% url 'main' %}" role="menuitem" class="text-danger">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            <span>Выйти</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Create Ad Button -->
+                <a href="{% url 'card_create' %}" class="btn btn-primary" title="Подать новое объявление">Подать объявление</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Categories Bar -->
+    <section class="categories-bar" aria-label="Категории объявлений">
+        <div class="cat-dropdown" id="catDropdown">
+            <button type="button" class="cat-dropdown-btn" id="catDropdownBtn" aria-expanded="false" aria-controls="catList">
+                <img src="{% static 'naxodki/img/category-icon.png' %}" alt="" class="cat-icon-small" loading="lazy">
+                <span>Категории</span>
+                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div id="catList">
+                {% for cat in cats %}
+                    {% if id == cat.id %}
+                        <div class="cat-item active" aria-current="page">
+                            <i class="{{cat.icon}}" aria-hidden="true"></i>
+                            <a href="{% url 'category' cat.id cls %}">
+                                <span>{{cat.cat_name}}</span>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="cat-item">
+                            <i class="{{cat.icon}}" aria-hidden="true"></i>
+                            <a href="{% url 'category' cat.id cls %}">
+                                <span>{{cat.cat_name}}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Type Toggle Section -->
+    <section class="toggle-section" aria-label="Фильтр по типу объявления">
+        <div class="toggle-container" role="tablist">
+            {% for tp in tip %}
+                {% if tp.class == cls %}
+                    <form action="{% url 'category' id tp.class %}" class="toggle-form">
+                        <button type="submit" class="toggle-btn active" role="tab" aria-selected="true" aria-controls="items-grid">
+                            {{tp.type}}
+                        </button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'category' id tp.class %}" class="toggle-form">
+                        <button type="submit" class="toggle-btn" role="tab" aria-selected="false" aria-controls="items-grid">
+                            {{tp.type}}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if not forloop.last %}
+                    <span class="divider" aria-hidden="true">|</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div class="section-text">
+                <h1 id="pageTitle">Найденные вещи</h1>
+                <p id="pageDesc">Здесь список вещей, которые были найдены и ждут владельцев</p>
+            </div>
+            <a href="#" class="view-all-link" title="Показать все объявления">
+                Посмотреть все
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="items-grid" id="items-grid" role="region" aria-label="Список объявлений">
+            {% for post in items %}
+                {% if post.activity == True %}
+                    <article class="card">
+                        <div class="card-image">
+                            <img
+                                src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'naxodki/img/placeholder.png' %}{% endif %}"
+                                alt="{{post.title}}"
+                                loading="lazy"
+                            >
+                        </div>
+                        <div class="card-details">
+                            <div class="details-title">{{post.title}}</div>
+                            <p class="details-desc">{{post.content|truncatewords:20}}</p>
+                            <div class="details-author">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span>Автор: {{post.author}}</span>
+                            </div>
+                            <a href="{{ post.get_absolute_url }}">
+                                <button type="button" class="btn-details">Подробнее</button>
+                            </a>
+                        </div>
+                        <div class="card-footer">
+                            <time class="item-date" datetime="{{ post.create_time|date:'Y-m-dTH:i:s' }}">
+                                {{post.create_time|date:'d.m.Y H:i'}}
+                            </time>
+                            <h3 class="item-title">{{post.title}}</h3>
+                        </div>
+                    </article>
+                {% endif %}
+            {% endfor %}
+        </div>
+    
+        <!-- Pagination -->
+        <div class="pagination" role="navigation" aria-label="Страницы">
+            <span class="page-dot active" aria-current="page" aria-label="Страница 1"></span>
+            <span class="page-dot" aria-label="Страница 2"></span>
+            <span class="page-dot" aria-label="Страница 3"></span>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Правила / Политика</h4>
+                <a href="#" title="Политика конфиденциальности">Политика</a>
+                <a href="#" title="Пользовательское соглашение">Правила</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <a href="mailto:info@findings.example" title="Написать нам">info@findings.example</a>
+                <a href="tel:+1234567890" title="Позвонить нам">+1 (234) 567‑89</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Мобильная навигация">
+        <a href="{% url 'main' %}" class="nav-item" title="На главную" aria-current="page">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span>Главная</span>
+        </a>
+        <a href="{% url 'card_create' %}" class="nav-item action-btn" title="Подать объявление">
+            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            <span>Подать</span>
+        </a>
+        <a href="{% url 'main' %}" class="nav-item" title="Профиль">
+            <i class="fas fa-user" aria-hidden="true"></i>
+            <span>Профиль</span>
+        </a>
+    </nav>
+</body>
+</html>

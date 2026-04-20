@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали клиента</title>
+</head>
+<body>
+    <h1>Детали клиента</h1>
+    <p><strong>Имя:</strong> {{ client.name }}</p>
+    <p><strong>Email:</strong> {{ client.email }}</p>
+    <p><strong>Телефон:</strong> {{ client.phone }}</p>
+    <p><strong>Создан:</strong> {{ client.created_at }}</p>
+    <p><strong>Обновлен:</strong> {{ client.updated_at }}</p>
+    <a href="{% url 'update_client' client.id %}">Редактировать</a>
+    <form method="post" action="{% url 'delete_client' client.id %}">
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+    </form>
+    <a href="{% url 'client_list' %}">Назад к списку</a>
+</body>
+</html>

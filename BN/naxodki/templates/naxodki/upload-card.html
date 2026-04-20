@@ -1,0 +1,312 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Подать объявление в Бюро находок">
+    <title>Подать объявление - Бюро Находок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'naxodki/css/app.css' %}">
+    <script src="{% static 'naxodki/js/script.js' %}" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="{% url 'main' %}" class="logo" aria-label="На главную">
+                <div class="logo-box">
+                    <i class="fas fa-search-location" aria-hidden="true"></i>
+                </div>
+                <span>Бюро Находок</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-bar" role="search">
+                <div class="search-category">
+                    <span>Категории</span>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </div>
+                <input type="search" placeholder="Поиск по названию..." aria-label="Поиск объявлений">
+                <button type="button" aria-label="Выполнить поиск">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!-- Header Actions -->
+            <nav class="header-actions" aria-label="Действия пользователя">
+                <button type="button" class="icon-btn" id="themeBtn" aria-label="Переключить тему">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+
+                <div class="lang-dropdown">
+                    <button type="button" class="lang-btn" id="langBtn" aria-expanded="false" aria-controls="langMenu">
+                        <span id="currentLang">RU</span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu" id="langMenu" aria-hidden="true">
+                        <a href="#" role="menuitem">Русский</a>
+                        <a href="#" role="menuitem">O'zbekcha</a>
+                        <a href="#" role="menuitem">English</a>
+                    </div>
+                </div>
+
+                <div class="profile-dropdown">
+                    <button type="button" class="profile-btn" id="profileBtn" aria-expanded="false" aria-controls="profileMenu">
+                        <img src="{% static 'naxodki/img/default-avatar.png' %}" alt="Аватар пользователя" class="header-avatar-img" loading="lazy">
+                    </button>
+                    <div class="dropdown-menu" id="profileMenu" aria-hidden="true">
+                        <div class="dropdown-header">
+                            <strong>Имя Пользователя</strong>
+                            <span>user@example.com</span>
+                        </div>
+                        <hr aria-hidden="true">
+                        <a href="{% url 'main' %}" role="menuitem">
+                            <i class="far fa-user" aria-hidden="true"></i>
+                            <span>Мой профиль</span>
+                        </a>
+                        <a href="{% url 'main' %}" role="menuitem">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span>Настройки</span>
+                        </a>
+                        <a href="{% url 'main' %}" role="menuitem" class="text-danger">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            <span>Выйти</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content create-ad-page" role="main">
+        <div class="container">
+            <div class="page-header-block">
+                <h1>Подать объявление</h1>
+            </div>
+
+            <!-- Create Ad Form -->
+            <form method="post" enctype="multipart/form-data" class="ad-form-grid" novalidate>
+                {% csrf_token %}
+
+                <div class="form-left">
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="titleInput">Заголовок объявления</label>
+                        <input
+                            type="text"
+                            id="titleInput"
+                            name="title"
+                            placeholder="Например: Найден паспорт..."
+                            class="form-input"
+                            required
+                            aria-required="true"
+                        >
+                    </div>
+
+                    <!-- Category Select -->
+                    <div class="form-group">
+                        <label for="categorySelect">Выберите категорию</label>
+                        <select id="categorySelect" name="category_id" class="form-input" required aria-required="true">
+                            <option value="" disabled>Выберите категорию...</option>
+                            <option value="1">Документы</option>
+                            <option value="2">Электроника</option>
+                            <option value="3">Одежда</option>
+                            <option value="4">Животные</option>
+                            <option value="5">Другое</option>
+                        </select>
+                    </div>
+
+                    <!-- City Select -->
+                    <div class="form-group">
+                        <label for="citySelect">Выберите город</label>
+                        <select id="citySelect" name="city" class="form-input" required aria-required="true">
+                            <option value="" disabled>Выберите город...</option>
+                            <option value="Ташкент">Ташкент</option>
+                            <option value="Самарканд">Самарканд</option>
+                            <option value="Бухара">Бухара</option>
+                        </select>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label for="locationInput">Точный адрес</label>
+                        <input
+                            type="text"
+                            id="locationInput"
+                            name="location"
+                            placeholder="Улица, дом, ориентир"
+                            class="form-input"
+                        >
+                    </div>
+
+                    <!-- Author Name -->
+                    <div class="form-group">
+                        <label for="authorInput">Автор</label>
+                        <input
+                            type="text"
+                            id="authorInput"
+                            name="author"
+                            placeholder="Ваше имя"
+                            class="form-input"
+                            required
+                            aria-required="true"
+                        >
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="contentTextarea">Описание / Особенности</label>
+                        <textarea
+                            id="contentTextarea"
+                            name="content"
+                            placeholder="Опишите находку подробнее..."
+                            class="form-input textarea-input"
+                        ></textarea>
+                    </div>
+
+                    <!-- Item Type Hidden Field -->
+                    <input type="hidden" name="item_type" value="lost">
+                </div>
+
+                <!-- Right Form Column -->
+                <div class="form-right">
+                    <!-- Photo Upload -->
+                    <fieldset class="form-group">
+                        <legend>Фотографии</legend>
+                        <div class="upload-box" id="uploadBox">
+                            <div class="upload-content">
+                                <p class="upload-title">Добавить фотографии</p>
+                                <p class="upload-desc">JPG, PNG, WEBP, макс. 10мб</p>
+                                <button type="button" class="btn-upload" id="uploadBtn" aria-label="Нажмите для загрузки файлов">
+                                    <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Загрузить
+                                </button>
+                                <input type="file" name="image" id="fileInput" accept="image/*" aria-label="Выберите изображение">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Map Picker -->
+                    <div class="form-group">
+                        <label for="mapContainer">Укажите место на карте</label>
+                        <div class="map-picker-container" id="mapContainer">
+                            <img
+                                src="{% static 'naxodki/img/map-placeholder.png' %}"
+                                alt="Выбор местоположения на карте"
+                                loading="lazy"
+                            >
+                            <div class="map-pin centered" aria-hidden="true">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Footer -->
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary btn-large">Опубликовать объявление</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Правила / Политика</h4>
+                <a href="#" title="Политика конфиденциальности">Политика</a>
+                <a href="#" title="Пользовательское соглашение">Правила</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <a href="mailto:info@findings.example" title="Написать нам">info@findings.example</a>
+                <a href="tel:+1234567890" title="Позвонить нам">+1 (234) 567‑89</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Мобильная навигация">
+        <a href="{% url 'main' %}" class="nav-item" title="На главную">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span>Главная</span>
+        </a>
+        <a href="{% url 'card_create' %}" class="nav-item action-btn" title="Подать объявление" aria-current="page">
+            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            <span>Подать</span>
+        </a>
+        <a href="{% url 'main' %}" class="nav-item" title="Профиль">
+            <i class="fas fa-user" aria-hidden="true"></i>
+            <span>Профиль</span>
+        </a>
+    </nav>
+</body>
+</html>
+
+                    <div class="form-group">
+                        <label>Описание / Особенности</label>
+                        <textarea name="content" placeholder="Опишите находку подробнее..." class="form-input textarea-input"></textarea>
+                    </div>
+
+                    <input type="hidden" name="item_type" value="lost">
+
+                </div>
+
+                <div class="form-right">
+                    
+                    <div class="form-group">
+                        <label>Фотографии</label>
+                        <div class="upload-box" id="uploadBox">
+                            <div class="upload-content">
+                                <p class="upload-title">Добавить фотографии</p>
+                                <p class="upload-desc">JPG, PNG, WEBP, макс. 10мб</p>
+                                <button type="button" class="btn-upload" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i> Загрузить
+                                </button>
+                                <input type="file" name="image" id="fileInput">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Укажите место на карте</label>
+                        <div class="map-picker-container">
+                            <img src="https://placehold.co/600x300/e0e0e0/555?text=Map+Location+Picker" alt="Map">
+                            <div class="map-pin centered"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary btn-large">Опубликовать объявление</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Правила / Политика <small>(abbr.)</small></h4>
+                <a href="#" title="Политика конфиденциальности">Политика</a>
+                <a href="#" title="Пользовательское соглашение">Правила</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <a href="mailto:info@findings.example">info@findings.example</a>
+                <a href="tel:+123456789">+1 (234) 567‑89</a>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'naxodki/js/script.js' %}"></script>
+    <nav class="mobile-bottom-nav">
+      <a href="{% url 'main' %}" class="nav-item"><i class="fas fa-home"></i><span>Главная</span></a>
+      <a href="{% url 'card_create' %}" class="nav-item action-btn"><i class="fas fa-plus-circle"></i><span>Подать</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Профиль</span></a>
+    </nav>
+</body>
+</html>

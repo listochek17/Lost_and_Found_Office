@@ -1,0 +1,42 @@
+{% load static %}
+{% load n_tags %}
+{% data_ver as dv %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'naxodki/css/verification.css' %}">
+  <title>{{ dv.title }}</title>
+  <!-- After successful OTP verification, user is redirected to main page; path is set in script2.js (MAIN_PAGE_URL). Replace '#' with your main/dashboard HTML file when created. -->
+</head>
+<body>
+<main class="container">
+   <section id="otp-screen" class="form-screen">
+        <div class="logo">
+            <i class="fas fa-planet-ringed"></i>
+            <span>Logo</span>
+        </div>
+        <h2 style="margin-bottom: 10px;">{{ dv.check }}</h2>
+        <p style="font-size: 12px; color: #666; margin-bottom: 20px;">
+            <span>Telefoningizga +*******4049 SMS orqali yuborilgan tasdiqlash kodini kiriting.</span>
+        </p>
+        <div class="input-group" id="otp-group">
+            <label class="label-text">{{ dv.kod }}</label>
+            <i class="fas fa-envelope-open-text"></i>
+            <input type="text" id="otpInput" placeholder="{{dv.sms}}" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+            <span class="error-message" id="otp-error"></span>
+        </div>
+        <div style="font-size: 12px; color: #1877F2; margin: 15px 0;">
+            <span>{{ dv.resend }} - 1:00</span>
+        </div>
+        <button type="button" class="btn btn-primary" id="otp-confirm-btn">{{dv.verify}}</button>
+        <div class="footer-text">
+            <a href="log-in.html" onclick="showScreen('login-screen')">{{dv.return}}</a>
+        </div>
+   </section>
+</main>
+<script src="script1.js"></script>
+</body>
+</html>

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,3 +121,10 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+UNFOLD = {
+    "SITE_TITLE": "Бюро находок",
+    "SITE_HEADER": "Админка",
+    "SITE_SUBHEADER": "Управление объявлениями",
+}

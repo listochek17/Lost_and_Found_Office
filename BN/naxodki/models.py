@@ -25,7 +25,7 @@ class Card(models.Model):
     title = models.CharField(max_length=100, help_text='Название предмета')
     slug = models.SlugField(max_length=225, unique=True, db_index=True)
     content = models.TextField(blank=True, help_text='Описание предмета')
-    author = models.CharField(max_length=100, help_text='Имя автора объявления')
+    author = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='cards')
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     activity = models.BooleanField(default=True, help_text='Активно ли объявление')
@@ -57,8 +57,8 @@ class Card(models.Model):
         """Валидация модели перед сохранением"""
         if not self.title or not self.title.strip():
             raise ValidationError('Название не может быть пустым')
-        if not self.author or not self.author.strip():
-            raise ValidationError('Укажите ваше имя')
+        if not self.author:
+            raise ValidationError('Укажите автора')
 
     def save(self, *args, **kwargs):
         """Генерирует уникальный slug если он не задан"""

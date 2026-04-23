@@ -7,7 +7,6 @@ class CardForm(forms.ModelForm):
         fields = [
             'title',
             'content',
-            'author',
             'city',
             'location',
             'category_id',

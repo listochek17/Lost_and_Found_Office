@@ -5,7 +5,7 @@ from naxodki import views
 urlpatterns = [
     path('', views.rec_main, name='rec_main'),
     path('main/', views.index, name='main'),
-    path('log_in/', views.log_in, name='log_in'),
+    path('log_in/', views.login_client, name='login_client'),
     path('registration/', views.reg, name='reg'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),

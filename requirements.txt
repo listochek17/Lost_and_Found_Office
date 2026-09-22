@@ -1,0 +1,6 @@
+Django>=6.0.1,<6.1
+django-unfold>=0.107
+django-extensions>=4.1
+python-slugify>=9.1
+Pillow>=12.3
+python-dotenv>=1.0

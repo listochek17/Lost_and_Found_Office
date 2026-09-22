@@ -1,0 +1,20 @@
+# Секреты
+.env
+
+# Окружение и IDE
+venv/
+.venv/
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# База данных
+*.db
+*.sqlite3
+
+# ОС
+.DS_Store
+Thumbs.db

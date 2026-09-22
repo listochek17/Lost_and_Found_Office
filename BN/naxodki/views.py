@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.hashers import check_password
 
 from .forms import CardForm, ClientForm
@@ -14,7 +15,7 @@ log_data = {
     'forgot':'Забыли пароль?',
     'remember':'Запомнить пароль',
     'dont_have':'Нет аккаунта?',
-    'register':'Зарегестрироваться'
+    'register':'Зарегистрироваться'
 }
 register_data = {
     'title':'Регистрация',
@@ -24,7 +25,7 @@ register_data = {
     'ver_pas':'Повторите пароль',
     'name':'ФИО',
     'have':'Есть аккаунт?',
-    'register':'Зарегестрироваться',
+    'register':'Зарегистрироваться',
     'tel':'Номер телефона'
 
 }
@@ -50,11 +51,22 @@ category_data = [
 
 types_data = [
     {'type':'Все категории', 'class':'all'},
-    {'type':'Найденое', 'class':'found'},
-    {'type':'Потереное', 'class':'lost'}
+    {'type':'Найденное', 'class':'found'},
+    {'type':'Потерянное', 'class':'lost'}
 ]
 
 
+
+
+def _is_owner_or_staff(request, client_id):
+    """Доступ к данным клиента: сам клиент (по сессии) или сотрудник (staff)."""
+    is_staff = request.user.is_authenticated and request.user.is_staff
+    return is_staff or request.session.get('client_id') == client_id
+
+
+def _deny(request):
+    messages.error(request, 'Недостаточно прав для этого действия.')
+    return redirect('login_client')
 
 
 def index(request):
@@ -135,11 +147,14 @@ def card_create(request):
     
     return render(request, 'naxodki/upload-card.html', {'form': form})
 
+@staff_member_required
 def client_list(request):
     clients = Client.objects.all()
     return render(request, 'naxodki/client_list.html', {'clients': clients})
 
 def client_detail(request, client_id):
+    if not _is_owner_or_staff(request, client_id):
+        return _deny(request)
     client = get_object_or_404(Client, id=client_id)
     return render(request, 'naxodki/client_detail.html', {'client': client})
 
@@ -148,13 +163,15 @@ def create_client(request):
         form = ClientForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Клиент успешно создан.')
-            return redirect('client_list')
+            messages.success(request, 'Аккаунт создан. Теперь войдите.')
+            return redirect('login_client')
     else:
         form = ClientForm()
     return render(request, 'naxodki/client_form.html', {'form': form, 'action': 'Создать клиента'})
 
 def update_client(request, client_id):
+    if not _is_owner_or_staff(request, client_id):
+        return _deny(request)
     client = get_object_or_404(Client, id=client_id)
     if request.method == 'POST':
         form = ClientForm(request.POST, instance=client)
@@ -167,6 +184,8 @@ def update_client(request, client_id):
     return render(request, 'naxodki/client_form.html', {'form': form, 'action': 'Обновить клиента'})
 
 def delete_client(request, client_id):
+    if not _is_owner_or_staff(request, client_id):
+        return _deny(request)
     client = get_object_or_404(Client, id=client_id)
     if request.method == 'POST':
         client.delete()
@@ -185,7 +204,7 @@ def login_client(request):
                 messages.success(request, 'Вы успешно вошли в систему.')
                 return redirect('main')
             else:
-                messages.error(request, 'Неверный пароль.')
+                messages.error(request, 'Неверный email или пароль.')
         except Client.DoesNotExist:
-            messages.error(request, 'Клиент с таким email не найден.')
+            messages.error(request, 'Неверный email или пароль.')
     return render(request, 'naxodki/log-in.html', log_data)
